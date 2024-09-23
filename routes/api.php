@@ -22,3 +22,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post('add-new-client', [ClientInfoController::class, 'addNewClinetInfo']);
 Route::post('get-question-list', [QuestionController::class, 'getAllQuestionList']);
+Route::post('submit-results', [QuestionController::class, 'submitQuestionResponse']);

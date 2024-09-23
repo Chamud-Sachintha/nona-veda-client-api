@@ -26,4 +26,9 @@ class ClientInfo extends Model
 
         return $this->create($map);
     }
+
+    public function find_by_id($id) {
+        $map['id'] = $id;
+        return $this->where($map)->first();
+    }
 }
