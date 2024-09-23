@@ -17,7 +17,7 @@ class ClientResponse extends Model
 
     public function add_log($info) {
         $map['client_id'] = $info['clientId'];
-        $map['result'] = $info['result'];
+        $map['result'] = $info['results'];
         $map['create_time'] = $info['createTime'];
 
         return $this->create($map);

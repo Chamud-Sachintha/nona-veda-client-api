@@ -40,9 +40,9 @@ class QuestionController extends Controller
     public function submitQuestionResponse(Request $request) {
 
         $client_id = (is_null($request->client_id) || empty($request->client_id)) ? "" : $request->client_id;
-        $vata_percentage = (is_null($request->vata_percentage) || empty($request->vata_percentage)) ? "" : $request->vata_percentage;
-        $pitta_percentage = (is_null($request->pitta_percentage) || empty($request->pitta_percentage)) ? "" : $request->pitta_percentage;
-        $kappa_percentage = (is_null($request->kappa_percentage) || empty($request->kappa_percentage)) ? "" : $request->kappa_percentage;
+        $vata_percentage = (is_null($request->vataPercentage) || empty($request->vataPercentage) && ($request->vataPercentage != 0)) ? "" : $request->vataPercentage;
+        $pitta_percentage = (is_null($request->pittaPercentage) || empty($request->pittaPercentage) && ($request->pittaPercentage != 0)) ? "" : $request->pittaPercentage;
+        $kappa_percentage = (is_null($request->kappaPercentage) || empty($request->kappaPercentage) && ($request->kappaPercentage != 0)) ? "" : $request->kappaPercentage;
 
         if ($client_id == "") {
             return $this->AppHelper->responseMessageHandle(0, "Client id is required.");

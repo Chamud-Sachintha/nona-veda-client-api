@@ -46,7 +46,7 @@ class ClientInfoController extends Controller
                 $res = $this->ClientInfo->add_log($clientInfo);
 
                 if ($res) {
-                    return $this->AppHelper->responseMessageHandle(1, "Operaion Successfully.");
+                    return $this->AppHelper->responseEntityHandle(1, "Operaion Successfully.", $res);
                 } else {
                     return $this->AppHelper->responseMessageHandle(0, "Error Occured.");
                 }
