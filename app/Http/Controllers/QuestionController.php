@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\QuizFormSubmited;
 use App\Helpers\AppHelper;
 use App\Models\ClientInfo;
 use App\Models\ClientResponse;
 use App\Models\Question;
 use Exception;
 use Illuminate\Http\Request;
+use Pusher\Pusher;
 
 class QuestionController extends Controller
 {
@@ -65,6 +67,32 @@ class QuestionController extends Controller
                     $res = $this->ClientResponse->add_log($info);
 
                     if ($res) {
+                        // Fire the event
+                        
+                        $pusher = new Pusher(
+                            env('PUSHER_APP_KEY'),
+                            env('PUSHER_APP_SECRET'),
+                            env('PUSHER_APP_ID'),
+                            [
+                                'cluster' => env('PUSHER_APP_CLUSTER'),
+                                'useTLS' => false
+                            ]
+                        );
+
+                        $client_info = $this->Client->find_by_id($info['clientId']);
+
+                        $info['clientName'] = $client_info['first_name'];
+                        $info['emailAddress'] = $client_info['email'];
+                        $result_list = explode(",", $info['results']);
+
+                        $info['vataResult'] = $result_list[0];
+                        $info['pittaResult'] = $result_list[1];
+                        $info['kappaResult'] = $result_list[2];
+                    
+                        $pusher->trigger('my-channel', 'my-event', [
+                            'dataValue' => $info
+                        ]);
+
                         return $this->AppHelper->responseMessageHandle(1, "Operation Successfully");
                     } else {
                         return $this->AppHelper->responseMessageHandle(0, "Error Occur");
