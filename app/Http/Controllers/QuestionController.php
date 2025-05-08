@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Events\QuizFormSubmited;
 use App\Helpers\AppHelper;
+use App\Mail\MailService;
 use App\Models\ClientInfo;
 use App\Models\ClientResponse;
 use App\Models\Question;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Pusher\Pusher;
 
 class QuestionController extends Controller
@@ -33,7 +35,7 @@ class QuestionController extends Controller
         foreach ($question_list as $key => $value) {
             $formated_questions[$key]['questionName'] = $value['question_name'];
             $formated_questions[$key]['categoryName'] = $value['category'];
-            $formated_questions[$key]['answers'] = explode(",", $value['answers']);
+            $formated_questions[$key]['answers'] = explode("@", $value['answers']);
         }
 
         return $this->AppHelper->responseEntityHandle(1, "Operation Successfully", $formated_questions);
@@ -93,6 +95,12 @@ class QuestionController extends Controller
                             'dataValue' => $info
                         ]);
 
+                        $sendMailRes = $this->sendMail($client_info['email'], $client_info['first_name']);
+
+                        if ($sendMailRes != true) {
+                            return $this->AppHelper->responseMessageHandle(0, $sendMailRes);
+                        }
+
                         return $this->AppHelper->responseMessageHandle(1, "Operation Successfully");
                     } else {
                         return $this->AppHelper->responseMessageHandle(0, "Error Occur");
@@ -103,6 +111,21 @@ class QuestionController extends Controller
             } catch (Exception $e) {
                 return $this->AppHelper->responseMessageHandle(0, "Error Occured " . $e->getMessage());
             }
+        }
+    }
+
+    private function sendMail($email, $name) {
+        try {
+            $details = [
+                'ClientName' => "ssadasd"
+            ];
+
+            Mail::to($email)->send(new MailService($details));
+
+            return true;
+        } catch (\Exception $e) {
+            print_r($e->getMessage()); die;
+            return $e->getMessage();
         }
     }
 }
