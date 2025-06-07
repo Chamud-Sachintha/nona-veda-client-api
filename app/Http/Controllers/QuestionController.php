@@ -117,14 +117,13 @@ class QuestionController extends Controller
     private function sendMail($email, $name) {
         try {
             $details = [
-                'ClientName' => "ssadasd"
+                'ClientName' => $name
             ];
 
             Mail::to($email)->send(new MailService($details));
 
             return true;
         } catch (\Exception $e) {
-            print_r($e->getMessage()); die;
             return $e->getMessage();
         }
     }
