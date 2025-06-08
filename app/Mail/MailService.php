@@ -30,7 +30,12 @@ class MailService extends Mailable
      */
     public function build()
     {
+        if (!view()->exists('emails.mailService')) {
+            print_r('View not found');
+        }
+
+
         return $this->subject('nonaveda.com')
-                    ->view('emails.mailService');
+            ->view('emails.mailService');
     }
 }

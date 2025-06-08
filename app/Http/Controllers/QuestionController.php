@@ -96,7 +96,7 @@ class QuestionController extends Controller
                         ]);
 
                         $sendMailRes = $this->sendMail($client_info['email'], $client_info['first_name']);
-                        print_r($sendMailRes);
+
                         if ($sendMailRes != true) {
                             return $this->AppHelper->responseMessageHandle(0, $sendMailRes);
                         }
