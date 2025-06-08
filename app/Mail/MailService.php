@@ -36,6 +36,6 @@ class MailService extends Mailable
 
 
         return $this->subject('nonaveda.com')
-            ->view('emails.mailService');
+            ->view('emails.mailservice');
     }
 }
