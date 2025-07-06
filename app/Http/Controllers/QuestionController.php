@@ -95,7 +95,16 @@ class QuestionController extends Controller
                             'dataValue' => $info
                         ]);
 
-                        $sendMailRes = $this->sendMail($client_info['email'], $client_info['first_name']);
+                        $results = [
+                            'vata' => $info['vataResult'],
+                            'pitta' => $info['pittaResult'],
+                            'kappa' => $info['kappaResult'],
+                        ];
+
+                        // Get the type with the highest value
+                        $type = array_keys($results, max($results))[0];
+
+                        $sendMailRes = $this->sendMail($client_info['email'], $client_info['first_name'], $type);
 
                         if ($sendMailRes != true) {
                             return $this->AppHelper->responseMessageHandle(0, $sendMailRes);
@@ -114,10 +123,11 @@ class QuestionController extends Controller
         }
     }
 
-    private function sendMail($email, $name) {
+    private function sendMail($email, $name ,$type) {
         try {
             $details = [
-                'ClientName' => $name
+                'ClientName' => $name,
+                'type' => $type
             ];
 
             Mail::to($email)->send(new MailService($details));

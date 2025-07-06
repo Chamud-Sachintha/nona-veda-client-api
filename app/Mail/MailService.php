@@ -30,7 +30,15 @@ class MailService extends Mailable
      */
     public function build()
     {
-        return $this->subject('nonaveda.com')
+        if ($this->details['type'] == 'vata') {
+            return $this->subject('nonaveda.com')
+            ->view('emails.vata_mailservice');
+        } else if ($this->details['type'] == 'pitta') {
+            return $this->subject('nonaveda.com')
+            ->view('emails.pitta_mailservice');
+        } else {
+            return $this->subject('nonaveda.com')
             ->view('emails.mailservice');
+        }
     }
 }
